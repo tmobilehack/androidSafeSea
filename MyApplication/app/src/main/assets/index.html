@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+    text {
+        font-size: 12px;
+    }
+
+    .mainBars rect {
+        shape-rendering: auto;
+        fill-opacity: 0;
+        stroke-width: 0.5px;
+        stroke: rgb(0, 0, 0);
+        stroke-opacity: 0;
+    }
+
+    .subBars {
+        shape-rendering: crispEdges;
+    }
+
+    .edges {
+        stroke: none;
+        fill-opacity: 0.5;
+    }
+
+    .header {
+        text-anchor: middle;
+        font-size: 30px;
+    }
+
+    .perc {
+        font-size: 25px;
+    }
+
+    line {
+        stroke: grey;
+    }
+
+</style>
+
+<body>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="http://vizjs.org/viz.v1.1.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.js"></script>
+    <script>
+      var color = {};
+      function transferData(data) {
+        var colorsOption = ["#3366CC", "#DC3912", "#FF9900", "#00ffd1", "#109618", "#990099", "#44516b", "#ddc212",
+        "#ff005c", "#76e4d0", "#124215", "#4f4c04", "#361741", "#6bdd12", "#ff5c97", "#068871", "#064353", "#ff6300",
+        "#00102f", "#7712dd", "#ff3600", "#00fff0", "#76337e", "#007d99", "#77c27f", "#ddc212","#3366CC", "#DC3912", "#FF9900", "#00ffd1", "#109618", "#990099", "#44516b", "#ddc212",
+        "#ff005c", "#76e4d0", "#124215", "#4f4c04", "#361741", "#6bdd12", "#ff5c97", "#068871", "#064353", "#ff6300",
+        "#00102f", "#7712dd", "#ff3600", "#00fff0", "#76337e", "#007d99", "#77c27f", "#ddc212","#3366CC", "#DC3912", "#FF9900", "#00ffd1", "#109618", "#990099", "#44516b", "#ddc212",
+        "#ff005c", "#76e4d0", "#124215", "#4f4c04", "#361741", "#6bdd12", "#ff5c97", "#068871", "#064353", "#ff6300",
+        "#00102f", "#7712dd", "#ff3600", "#00fff0", "#76337e", "#007d99", "#77c27f", "#ddc212","#3366CC", "#DC3912", "#FF9900", "#00ffd1", "#109618", "#990099", "#44516b", "#ddc212",
+        "#ff005c", "#76e4d0", "#124215", "#4f4c04", "#361741", "#6bdd12", "#ff5c97", "#068871", "#064353", "#ff6300",
+        "#00102f", "#7712dd", "#ff3600", "#00fff0", "#76337e", "#007d99", "#77c27f", "#ddc212","#3366CC", "#DC3912", "#FF9900", "#00ffd1", "#109618", "#990099", "#44516b", "#ddc212",
+        "#ff005c", "#76e4d0", "#124215", "#4f4c04", "#361741", "#6bdd12", "#ff5c97", "#068871", "#064353", "#ff6300",
+        "#00102f", "#7712dd", "#ff3600", "#00fff0", "#76337e", "#007d99", "#77c27f", "#ddc212","#3366CC", "#DC3912", "#FF9900", "#00ffd1", "#109618", "#990099", "#44516b", "#ddc212",
+        "#ff005c", "#76e4d0", "#124215", "#4f4c04", "#361741", "#6bdd12", "#ff5c97", "#068871", "#064353", "#ff6300",
+        "#00102f", "#7712dd", "#ff3600", "#00fff0", "#76337e", "#007d99", "#77c27f", "#ddc212","#3366CC", "#DC3912", "#FF9900", "#00ffd1", "#109618", "#990099", "#44516b", "#ddc212",
+        "#ff005c", "#76e4d0", "#124215", "#4f4c04", "#361741", "#6bdd12", "#ff5c97", "#068871", "#064353", "#ff6300",
+        "#00102f", "#7712dd", "#ff3600", "#00fff0", "#76337e", "#007d99", "#77c27f", "#ddc212","#3366CC", "#DC3912", "#FF9900", "#00ffd1", "#109618", "#990099", "#44516b", "#ddc212",
+        "#ff005c", "#76e4d0", "#124215", "#4f4c04", "#361741", "#6bdd12", "#ff5c97", "#068871", "#064353", "#ff6300",
+        "#00102f", "#7712dd", "#ff3600", "#00fff0", "#76337e", "#007d99", "#77c27f", "#ddc212","#3366CC", "#DC3912", "#FF9900", "#00ffd1", "#109618", "#990099", "#44516b", "#ddc212",
+        "#ff005c", "#76e4d0", "#124215", "#4f4c04", "#361741", "#6bdd12", "#ff5c97", "#068871", "#064353", "#ff6300",
+        "#00102f", "#7712dd", "#ff3600", "#00fff0", "#76337e", "#007d99", "#77c27f", "#ddc212","#3366CC", "#DC3912", "#FF9900", "#00ffd1", "#109618", "#990099", "#44516b", "#ddc212",
+        "#ff005c", "#76e4d0", "#124215", "#4f4c04", "#361741", "#6bdd12", "#ff5c97", "#068871", "#064353", "#ff6300",
+        "#00102f", "#7712dd", "#ff3600", "#00fff0", "#76337e", "#007d99", "#77c27f", "#ddc212",];
+        console.log(data);
+        var crimes = JSON.parse(data).crimes.home;
+        var resultData = [];
+        for (var i = 0; i < crimes.length; i++) {
+          var crimeTime;
+          if (crimes[i].hour >= 0 && crimes[i].hour <= 3) {
+            crimeTime = "midnight-4am";
+          } else if (crimes[i].hour >= 4 && crimes[i].hour <= 7) {
+            crimeTime = "4am-8am";
+          } else if (crimes[i].hour >= 8 && crimes[i].hour <= 11) {
+            crimeTime = "8am-noon";
+          } else if (crimes[i].hour >= 12 && crimes[i].hour <= 15) {
+            crimeTime = "noon-4pm";
+          } else if (crimes[i].hour >= 16 && crimes[i].hour <= 19) {
+            crimeTime = "4pm-8pm";
+          } else if (crimes[i].hour >= 20 && crimes[i].hour <= 23) {
+            crimeTime = "8pm-midnight";
+          }
+          resultData.push(
+            [
+              crimes[i].offense_description,
+              crimeTime,
+              1
+            ]
+          )
+          color[crimes[i].offense_description] = colorsOption[i];
+        }
+        return resultData;
+      }
+
+      var data = transferData(JSInterface.getOurString());
+
+        var svg = d3.select("body").append("svg").attr("width", 1200).attr("height", 800);
+
+        svg.append("text").attr("x", 350).attr("y", 70)
+            .attr("class", "header").text("Crime Type/Crime Time");
+
+
+        var g = [svg.append("g").attr("transform", "translate(150,100)")];
+
+        var bp = [viz.bP()
+            .data(data)
+            .min(12)
+            .pad(1)
+            .height(600)
+            .width(400)
+            .barSize(20)
+            .fill(d => color[d.primary]), viz.bP()
+            .data(data)
+            .value(d => d[3])
+            .min(12)
+            .pad(1)
+            .height(600)
+            .width(400)
+            .barSize(35)
+            .fill(d => color[d.primary])
+        ];
+
+        [0, 1].forEach(function(i) {
+            g[i].call(bp[i])
+
+            g[i].append("text").attr("x", -50).attr("y", -8).attr("class", "label").style("text-anchor", "middle").text("Type");
+            g[i].append("text").attr("x", 450).attr("y", -8).attr("class", "label").style("text-anchor", "middle").text("Time");
+
+            g[i].append("line").attr("x1", -100).attr("x2", 0);
+            g[i].append("line").attr("x1", 400).attr("x2", 500);
+
+            g[i].append("line").attr("y1", 610).attr("y2", 610).attr("x1", -100).attr("x2", 0);
+            g[i].append("line").attr("y1", 610).attr("y2", 610).attr("x1", 200).attr("x2", 300);
+
+            g[i].selectAll(".mainBars")
+                .on("mouseover", mouseover)
+                .on("mouseout", mouseout);
+
+            g[i].selectAll(".mainBars").append("text").attr("class", "label")
+                .attr("x", d => (d.part == "primary" ? -30 : 30))
+                .attr("y", d => +6)
+                .text(d => d.key)
+                .attr("text-anchor", d => (d.part == "primary" ? "end" : "start"));
+
+            g[i].selectAll(".mainBars").append("text").attr("class", "perc")
+                .attr("x", d => (d.part == "primary" ? -50 : 50))
+                .attr("y", d => -20)
+                .text(function(d) {
+                    return d3.format("0.0%")(d.percent)
+                })
+                .attr("text-anchor", d => (d.part == "primary" ? "end" : "start"));
+        });
+
+        function mouseover(d) {
+            [0, 1].forEach(function(i) {
+                bp[i].mouseover(d);
+
+                g[i].selectAll(".mainBars").select(".perc")
+                    .text(function(d) {
+                        return d3.format("0.0%")(d.percent)
+                    });
+            });
+        }
+
+        function mouseout(d) {
+            [0, 1].forEach(function(i) {
+                bp[i].mouseout(d);
+
+                g[i].selectAll(".mainBars").select(".perc")
+                    .text(function(d) {
+                        return d3.format("0.0%")(d.percent)
+                    });
+            });
+        }
+        d3.select(self.frameElement).style("height", "800px");
+    </script>
+</body>
+
+</html>

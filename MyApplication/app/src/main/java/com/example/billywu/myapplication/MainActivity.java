@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     };
     int duration = Toast.LENGTH_SHORT;
     Intent intent;
-    Double targetLongitude, targetLatitude;
+    Double targetLongitude, targetLatitude, targetScore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,9 +70,6 @@ public class MainActivity extends AppCompatActivity {
         searchButton.setOnClickListener(
                 new View.OnClickListener() {
                     public void onClick(View view) {
-
-
-
                         Geocoder geocoder = new Geocoder(context, Locale.getDefault());
                         try {
                             addresses = geocoder.getFromLocationName(textField.getText().toString(), 1);
@@ -127,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
                             spinner.setVisibility(View.VISIBLE);
                             targetLongitude = lastKnownLocation.getLongitude();
                             targetLatitude = lastKnownLocation.getLatitude();
-                            new TaskTask().execute();
+                            new TaskTask().execute(new LocationPoint(targetLongitude, targetLatitude));
                         } catch (SecurityException e) {
                             Toast toast = Toast.makeText(context, "you don't have permissions", duration);
                             toast.show();
@@ -160,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
                 Webb webb = com.goebl.david.Webb.create();
 
                 Response<JSONObject> response =
-                webb.get("http://ec2-34-208-245-91.us-west-2.compute.amazonaws.com:5000")
+                webb.get("http://ec2-34-208-245-91.us-west-2.compute.amazonaws.com:5000/api")
                         .param("longitude", Double.toString(lp[0].getLongitude()))
                         .param("latitude", Double.toString(lp[0].getLatitude()))
                         .ensureSuccess()
