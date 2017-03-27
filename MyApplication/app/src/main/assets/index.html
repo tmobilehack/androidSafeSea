@@ -2,7 +2,7 @@
 <meta charset="utf-8">
 <style>
     text {
-        font-size: 12px;
+        font-size: 10px;
     }
 
     .mainBars rect {
@@ -28,7 +28,7 @@
     }
 
     .perc {
-        font-size: 25px;
+        font-size: 10px;
     }
 
     line {
@@ -146,8 +146,8 @@
                 .attr("text-anchor", d => (d.part == "primary" ? "end" : "start"));
 
             g[i].selectAll(".mainBars").append("text").attr("class", "perc")
-                .attr("x", d => (d.part == "primary" ? -50 : 50))
-                .attr("y", d => -20)
+                .attr("x", d => (d.part == "primary" ? -130 : 150))
+                .attr("y", d => 5)
                 .text(function(d) {
                     return d3.format("0.0%")(d.percent)
                 })

@@ -104,11 +104,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
             propertyButton.setText(
-                    "Property\n" + Math.round(targetScoreProperty) + "");
+                    "Overall\n" + Math.round(targetScoreProperty) + "");
             transButton.setText(
-                    "Trans\n" + Math.round(targetScoreTrans) + "");
+                    "Vehicle\n" + Math.round(targetScoreTrans) + "");
             pedButton.setText(
-                    "Ped\n" + Math.round(targetScorePed) + "");
+                    "Pedestrian\n" + Math.round(targetScorePed) + "");
 
 
             for (int i = 0; i < homeCrimes.length(); i++) {
